@@ -4,8 +4,10 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import Timer from '@/components/Timer';
+import { useRole } from '@/hooks/useRole';
 
 export default function HomeScreen() {
+  const { role } = useRole();
 
   console.log('Rendering HomeScreen component!');
 
@@ -52,6 +54,9 @@ export default function HomeScreen() {
       <ThemedView style={styles.container}>
       <Timer />
       </ThemedView>
+      <ThemedText>
+        Deine aktuelle Rolle ist: {role ? role : 'Keine Rolle ausgewählt'}
+      </ThemedText>
     </ParallaxScrollView>
   );
 }

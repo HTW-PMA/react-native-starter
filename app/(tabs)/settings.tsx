@@ -1,25 +1,22 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Dropdown } from 'react-native-element-dropdown';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { useState } from 'react';
+import { useRole } from '@/hooks/useRole';
 
 export default function SettingsScreen() {
+  const { role, setRole } = useRole();
 
   console.log('Rendering SettingsScreen component!');
 
   const data = [
-    { label: 'Studierende', value: 'students' },
-    { label: 'Angestellte', value: 'employees' },
-    { label: 'Gäste', value: 'guests' },
+    { label: 'Student:in', value: 'Student:in' },
+    { label: 'Angestellte:r', value: 'Angestellte:r' },
+    { label: 'Gast', value: 'Gast' },
   ];
-
-  let currentRole = ""; // Einfache Variable (kein State Management)
-  const [role, setRole] = useState(""); // State Management I
-  const [additionalRole, setAdditionalRole] = useState(""); // State Management II
 
   return (
     <ParallaxScrollView
@@ -28,31 +25,6 @@ export default function SettingsScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Settings</ThemedText>
       </ThemedView>
-      <ThemedText type="subtitle">
-        Ohne State Management
-      </ThemedText>
-      <ThemedView style={styles.rowContainer}>
-        <ThemedText style={styles.text}>Rolle</ThemedText>
-        <Dropdown
-          data={data}
-          labelField="label"
-          valueField="value"
-          placeholder="Wähle ..."
-          onChange={item => {
-            currentRole = item.value;
-          }}
-          value={
-            currentRole
-          }
-          style={styles.dropdown}
-          renderLeftIcon={() => (
-            <TabBarIcon style={styles.icon} color="black" name={'people'} size={20} />
-          )}
-        />
-      </ThemedView>
-      <ThemedText type="subtitle">
-        Mit State Management
-      </ThemedText>
       <ThemedView style={styles.rowContainer}>
         <ThemedText style={styles.text}>Rolle</ThemedText>
         <Dropdown
@@ -65,28 +37,6 @@ export default function SettingsScreen() {
           }}
           value={
             role
-          }
-          style={styles.dropdown}
-          renderLeftIcon={() => (
-            <TabBarIcon style={styles.icon} color="black" name={'people'} size={20} />
-          )}
-        />
-      </ThemedView>
-      <ThemedText type="subtitle">
-        Auch mit State Management
-      </ThemedText>
-      <ThemedView style={styles.rowContainer}>
-        <ThemedText style={styles.text}>Zusatzrolle</ThemedText>
-        <Dropdown
-          data={data}
-          labelField="label"
-          valueField="value"
-          placeholder="Wähle ..."
-          onChange={item => {
-            setAdditionalRole(item.value);
-          }}
-          value={
-            additionalRole
           }
           style={styles.dropdown}
           renderLeftIcon={() => (
@@ -118,7 +68,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 30
+    marginBottom: 5
   },
   dropdown: {
     flex: 1,

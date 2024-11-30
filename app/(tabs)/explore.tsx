@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ThemedButton from '@/components/ThemedButton';
 import { useState } from 'react';
+import DataFetcher from '@/components/DataFetcher';
 
 export default function ExploreScreen() {
 
@@ -90,11 +91,14 @@ export default function ExploreScreen() {
       </Collapsible>
       <ThemedView style={styles.buttonContainer}>
         <ThemedButton
-          title="Press this button!"
+          title="Next Page!"
           onPress={() => setCount(count + 1)}
         />
-        <ThemedText style={styles.counterText}>Count: {count}</ThemedText>
+        <ThemedText style={styles.counterText}>Page: {count}</ThemedText>
       </ThemedView>
+      <DataFetcher
+        page={count}
+      />
     </ParallaxScrollView>
   );
 }
@@ -117,14 +121,14 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   buttonContainer: {
-    flexDirection: 'column', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   counterText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginTop: 20, 
+    marginTop: 20,
   },
 });
