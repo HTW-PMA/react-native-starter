@@ -6,8 +6,11 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import ThemedButton from '@/components/ThemedButton';
+import { useState } from 'react';
 
 export default function TabTwoScreen() {
+  const [count, setCount] = useState(0);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -40,9 +43,9 @@ export default function TabTwoScreen() {
         <ThemedText>
           For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
           <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
+          different screen densities.
         </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
+        <Image source={require('@/assets/images/react-logo.png')} style={styles.image} />
         <ExternalLink href="https://reactnative.dev/docs/images">
           <ThemedText type="link">Learn more</ThemedText>
         </ExternalLink>
@@ -50,9 +53,7 @@ export default function TabTwoScreen() {
       <Collapsible title="Custom fonts">
         <ThemedText>
           Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
+          <ThemedText style={{ fontFamily: 'SpaceMono' }}>custom fonts such as this one.</ThemedText>
         </ThemedText>
         <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
           <ThemedText type="link">Learn more</ThemedText>
@@ -84,9 +85,13 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
-      <ThemedButton
-        title="Press this button!"
-      />
+      <ThemedView style={styles.buttonContainer}>
+        <ThemedButton
+          title="Press this button!"
+          onPress={() => setCount(count + 1)}
+        />
+        <ThemedText style={styles.counterText}>Count: {count}</ThemedText>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -101,5 +106,23 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  image: {
+    alignSelf: 'center',
+    width: 100,
+    height: 100,
+    marginVertical: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'column', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginVertical: 20,
+  },
+  counterText: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
+    marginTop: 10, 
   },
 });

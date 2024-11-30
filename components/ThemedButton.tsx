@@ -3,16 +3,17 @@ import { ThemedView } from '@/components/ThemedView';
 
 type ThemedButtonProps = {
     title: string;
+    onPress?: () => void;
 };
 
-export default function ThemedButton({ title }: ThemedButtonProps) {
+export default function ThemedButton({ title, onPress }: ThemedButtonProps) {
     const theme = useColorScheme() ?? 'light';
 
     return (
         <ThemedView>
             <Button
                 title={title}
-                onPress={() => Alert.alert('This is an alert!')}
+                onPress={onPress ?? (() => Alert.alert('This is an alert!'))}
                 color={theme === 'light' ? styles.light.color : styles.dark.color}
             />
         </ThemedView>
