@@ -8,7 +8,10 @@ import { ThemedView } from '@/components/ThemedView';
 import ThemedButton from '@/components/ThemedButton';
 import { useState } from 'react';
 
-export default function TabTwoScreen() {
+export default function ExploreScreen() {
+
+  console.log('Rendering ExploreScreen component!');
+
   const [count, setCount] = useState(0);
 
   return (
@@ -117,12 +120,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column', 
     alignItems: 'center', 
     justifyContent: 'center', 
-    marginVertical: 20,
   },
   counterText: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 24,
+    fontWeight: 'bold',
     color: '#333',
-    marginTop: 10, 
+    marginTop: 20, 
   },
 });

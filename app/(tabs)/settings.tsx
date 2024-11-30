@@ -9,6 +9,8 @@ import { useState } from 'react';
 
 export default function SettingsScreen() {
 
+  console.log('Rendering SettingsScreen component!');
+
   const data = [
     { label: 'Studierende', value: 'students' },
     { label: 'Angestellte', value: 'employees' },
@@ -18,8 +20,6 @@ export default function SettingsScreen() {
   let currentRole = ""; // Einfache Variable (kein State Management)
   const [role, setRole] = useState(""); // State Management I
   const [additionalRole, setAdditionalRole] = useState(""); // State Management II
-
-  console.log('Rendering SettingsScreen component!');
 
   return (
     <ParallaxScrollView
