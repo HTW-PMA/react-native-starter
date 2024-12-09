@@ -1,14 +1,19 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput, Text } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Dropdown } from 'react-native-element-dropdown';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { useRole } from '@/hooks/useRole';
+import { useState } from 'react';
+import { globalStyles } from '@/styles';
+import styled from 'styled-components/native';
+import { ThemedTextInput } from '@/components/ThemedTextInput';
 
 export default function SettingsScreen() {
   const { role, setRole } = useRole();
+  const [text, setText] = useState('');
 
   console.log('Rendering SettingsScreen component!');
 
@@ -17,6 +22,22 @@ export default function SettingsScreen() {
     { label: 'Angestellte:r', value: 'Angestellte:r' },
     { label: 'Gast', value: 'Gast' },
   ];
+
+  // styled-components/native
+  const StyledTextInput = styled.TextInput`
+  border-width: 3px;
+  border-color: red;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+`;
+
+  // styled-components/native
+  const Title = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: red
+`;
 
   return (
     <ParallaxScrollView
@@ -44,6 +65,33 @@ export default function SettingsScreen() {
           )}
         />
       </ThemedView>
+      <Text style={{ color: 'green', fontSize: 18, fontWeight: 'bold' }}>Inline Styling</Text>
+      <TextInput
+        style={{ borderWidth: 3, borderColor: 'green', padding: 10, marginBottom: 20, borderRadius: 5 }}
+        placeholder="Eingabe"
+        value={text}
+        onChangeText={(text) => setText(text)}
+      />
+      <Text style={globalStyles.title}>Globale Styles in einer separaten Datei</Text>
+      <TextInput
+        style={globalStyles.input}
+        placeholder="Eingabe"
+        value={text}
+        onChangeText={(text) => setText(text)}
+      />
+      <Title>Styled-Components</Title>
+      <StyledTextInput
+        placeholder="Eingabe"
+        value={text}
+        onChangeText={(text) => setText(text)}
+      />
+      <ThemedText type="subtitle">Theme-basierte Lösungen</ThemedText>
+      <ThemedTextInput
+        type="default"
+        placeholder="Eingabe"
+        value={text}
+        onChangeText={(text) => setText(text)}
+      />
     </ParallaxScrollView>
   );
 }
