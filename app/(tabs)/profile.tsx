@@ -5,9 +5,9 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={{}}>Item 1</Text>
-      <Text style={{alignSelf: 'flex-end'}}>Item 2</Text>
-      <Text style={{fontSize: 40}}>Item 3</Text>
+      <Text style={{backgroundColor: 'yellow', flexGrow: 1}}>Item 1</Text>
+      <Text style={{alignSelf: 'flex-end', backgroundColor: 'orange',  flexBasis:100}}>Item 2</Text>
+      <Text style={{fontSize: 40, backgroundColor: 'lightblue'}}>Item 3</Text>
     </View>
   );
 }
@@ -18,5 +18,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'flex-start',
+        height: '100%'
       },
 });
