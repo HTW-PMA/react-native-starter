@@ -5,9 +5,7 @@ import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import ThemedButton from '@/components/ThemedButton';
 import { useState } from 'react';
-import DataFetcher from '@/components/DataFetcher';
 
 export default function ExploreScreen() {
 
@@ -89,16 +87,6 @@ export default function ExploreScreen() {
           ),
         })}
       </Collapsible>
-      <ThemedView style={styles.buttonContainer}>
-        <ThemedButton
-          title="Next Page!"
-          onPress={() => setCount(count + 1)}
-        />
-        <ThemedText style={styles.counterText}>Page: {count}</ThemedText>
-      </ThemedView>
-      <DataFetcher
-        page={count}
-      />
     </ParallaxScrollView>
   );
 }
