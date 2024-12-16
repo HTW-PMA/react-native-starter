@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Character } from './characterTypes';
+import { Character } from '../types/characterTypes';
 
 /**
  * Ein benutzerdefinierter Hook (`useCharacterData`) zum Abrufen von Charakterdaten von der Rick-and-Morty-API.
