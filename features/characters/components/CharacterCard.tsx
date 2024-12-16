@@ -16,6 +16,7 @@ export default function CharacterCard({ name, species }: CharacterCardProps) {
 const styles = StyleSheet.create({
   card: {
     width: 300,
+    height: 80,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
     padding: 16,
