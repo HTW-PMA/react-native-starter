@@ -1,71 +1,88 @@
 import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../types/characterTypes';
 
+const STORAGE_KEY = '@characters_data';
+
 /**
- * Ein benutzerdefinierter Hook (`useCharacterData`) zum Abrufen von Charakterdaten von der Rick-and-Morty-API.
+ * Ein benutzerdefinierter Hook (`useCharacterData`) zum Abrufen und Speichern von Charakterdaten 
+ * aus der Rick-and-Morty-API. Der Hook nutzt AsyncStorage, um die abgerufenen Daten lokal zu speichern, 
+ * sodass sie auch offline oder nach einem Neustart verfügbar sind.
  * 
- * @param page - Die Seitennummer, die abgerufen werden soll (Paginierung).
- * 
- * @returns Ein Objekt mit drei Zuständen:
- * - `characters`: Ein Array von Charakterdaten (erfolgreich abgerufene Ergebnisse).
- * - `loading`: Ein Boolean, der anzeigt, ob der Datenabruf derzeit läuft.
- * - `error`: Ein String mit einer Fehlermeldung oder `null`, wenn kein Fehler aufgetreten ist.
+ * @returns Ein Objekt mit den folgenden Zuständen und Funktionen:
+ * - `characters` (`Character[]`): Ein Array von Charakterdaten, geladen aus AsyncStorage oder der API.
+ * - `loading` (`boolean`): Zeigt an, ob der Datenabruf derzeit läuft (`true`) oder abgeschlossen ist (`false`).
+ * - `error` (`string | null`): Enthält eine Fehlermeldung, falls etwas schiefgeht, ansonsten `null`.
+ * - `refreshCharacters` (`() => Promise<void>`): Eine Funktion, die den AsyncStorage leert 
+ *   und die API erneut abruft, um die Charakterdaten zu aktualisieren.
  * 
  * Funktionsweise:
- * - Der Hook führt eine Fetch-Anfrage aus, wenn sich die `page`-Nummer ändert.
- * - Während der Anfrage wird der `loading`-Status auf `true` gesetzt.
- * - Wenn die Anfrage erfolgreich ist, werden die Ergebnisse in den Zustand `characters` geschrieben und `error` auf `null` gesetzt.
- * - Bei einem Fehler wird `error` mit der entsprechenden Fehlermeldung gefüllt.
- * - Der Hook stellt sicher, dass keine Zustandsaktualisierungen erfolgen, wenn die Komponente, die den Hook verwendet, bereits unmontiert wurde.
+ * - Beim ersten Laden versucht der Hook, die Charakterdaten aus dem AsyncStorage zu laden.
+ * - Falls keine gespeicherten Daten vorhanden sind, ruft der Hook die Daten von der API ab 
+ *   und speichert sie im AsyncStorage.
+ * - Die `refreshCharacters`-Funktion ermöglicht es, die Daten manuell zu aktualisieren. 
+ *   Dabei werden die lokalen Daten aus dem AsyncStorage entfernt und neue Daten von der API geladen.
+ * - Der Ladezustand (`loading`) und Fehlerzustand (`error`) werden während des Abrufs entsprechend verwaltet.
  */
-export function useCharacterData(page: number): {
+export function useCharacterData(): {
   characters: Character[];
   loading: boolean;
   error: string | null;
+  refreshCharacters: () => Promise<void>;
 } {
   const [characters, setCharacters] = useState<Character[]>([]);
-
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let isMounted = true;
+  const fetchCharactersFromApi = async () => {
+    setLoading(true);
+    try {
+      console.log('Rufe Daten von der API ab.');
+      const response = await fetch(`https://rickandmortyapi.com/api/character`);
+      if (!response.ok) throw new Error(`HTTP-Fehler! Status: ${response.status}`);
 
-    async function fetchCharacters(): Promise<void> {
-      setLoading(true);
+      const result = await response.json();
 
-      try {
-        console.log(`Rufe Daten von der API ab für Seite ${page}`)
-        const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
+      setCharacters(result.results);
 
-        if (!response.ok) {
-          throw new Error(`HTTP-Fehler! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (isMounted) {
-          setCharacters(result.results); 
-          setError(null); 
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Ein unbekannter Fehler ist aufgetreten.');
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(result.results));
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ein unbekannter Fehler ist aufgetreten.');
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchCharacters();
+  const loadCharactersFromStorage = async (): Promise<boolean> => {
+    try {
+      const storedData = await AsyncStorage.getItem(STORAGE_KEY);
+      if (storedData) {
+        console.log('Lade Daten aus AsyncStorage.');
+        setCharacters(JSON.parse(storedData));
+        return true;
+      }
+    } catch (err) {
+      console.error('Fehler beim Laden der gespeicherten Daten:', err);
+    }
+    return false;
+  };
 
-    return () => {
-      isMounted = false;
+  const refreshCharacters = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY); 
+    await fetchCharactersFromApi();
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      const hasLocalData = await loadCharactersFromStorage();
+      if (!hasLocalData) {
+        await fetchCharactersFromApi();
+      }
     };
-  }, [page]); 
 
-  return { characters, loading, error };
+    loadData();
+  }, []);
+
+  return { characters, loading, error, refreshCharacters };
 }

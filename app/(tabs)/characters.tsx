@@ -5,9 +5,8 @@ import { Character } from '@/features/characters/types/characterTypes';
 import CharacterCard from '@/features/characters/components/CharacterCard';
 
 export default function CharactersScreen() {
-  const [page, setPage] = useState(1);
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
-  const { characters, loading, error } = useCharacterData(page);
+  const { characters, loading, error, refreshCharacters } = useCharacterData();
 
   useEffect(() => {
     if (characters.length > 0) {
@@ -18,10 +17,6 @@ export default function CharactersScreen() {
       });
     }
   }, [characters]);
-
-  useEffect(() => {
-    setAllCharacters([]);
-  }, []);
 
   const renderItem = ({ item }: { item: Character }) => (
     <CharacterCard name={item.name} species={item.species} />
@@ -39,13 +34,8 @@ export default function CharactersScreen() {
         ListEmptyComponent={
           !loading && !error ? <Text style={styles.empty}>No characters found.</Text> : null
         }
-        onEndReached={() => setPage(page + 1)}
-        onEndReachedThreshold={0.8}
         refreshing={loading}
-        onRefresh={() => {
-          setPage(0);
-          setAllCharacters([]);
-        }}
+        onRefresh={refreshCharacters}
       />
     </View>
   );
