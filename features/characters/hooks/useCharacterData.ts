@@ -36,6 +36,7 @@ export function useCharacterData(page: number): {
       setLoading(true);
 
       try {
+        console.log(`Rufe Daten von der API ab für Seite ${page}`)
         const response = await fetch(`https://rickandmortyapi.com/api/character?page=${page}`);
 
         if (!response.ok) {
