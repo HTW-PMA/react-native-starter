@@ -7,10 +7,21 @@ export default function CharactersLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: '#A1CEDC' },
         headerTintColor: '#fff',
-        headerTitle: () => <CustomHeader />,
+        headerTitle: () => <CustomHeader />,        
         headerTitleAlign: 'center',
       }}
-    />
+    >
+      <Stack.Screen
+        name="modal"
+        options={{
+          presentation: 'modal', 
+          title: 'Character Modal',
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          headerShown: false,
+        }}
+      />
+    </Stack>
   );
 }
 

@@ -22,7 +22,8 @@ export default function CharactersScreen() {
 
   const renderItem = ({ item }: { item: Character }) => (
     <Link
-      href={`/characters/details?id=${item.id}&name=${item.name}&species=${encodeURIComponent(item.species)}`}
+      href={`/characters/modal`} // Modal
+      //href={`/characters/details?id=${item.id}&name=${item.name}&species=${encodeURIComponent(item.species)}`} // Stack
       style={styles.linkCard}>
       <CharacterCard name={item.name} species={item.species} />
     </Link>
