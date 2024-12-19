@@ -1,8 +1,10 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, Image, Text, FlatList, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useCharacterData } from '@/features/characters/hooks/useCharacterData';
 import { Character } from '@/features/characters/types/characterTypes';
 import CharacterCard from '@/features/characters/components/CharacterCard';
+import { Link } from 'expo-router';
+import { ThemedView } from '@/components/ThemedView';
 
 export default function CharactersScreen() {
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
@@ -19,11 +21,15 @@ export default function CharactersScreen() {
   }, [characters]);
 
   const renderItem = ({ item }: { item: Character }) => (
-    <CharacterCard name={item.name} species={item.species} />
+    <Link
+      href={`/characters/details?id=${item.id}&name=${item.name}&species=${encodeURIComponent(item.species)}`}
+      style={styles.linkCard}>
+      <CharacterCard name={item.name} species={item.species} />
+    </Link>
   );
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       {loading && <Text style={styles.loading}>Loading...</Text>}
       {error && <Text style={styles.error}>Error: {error}</Text>}
       <FlatList
@@ -37,7 +43,7 @@ export default function CharactersScreen() {
         refreshing={loading}
         onRefresh={refreshCharacters}
       />
-    </View>
+    </ThemedView>
   );
 }
 
@@ -68,5 +74,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     marginVertical: 20,
-  }
+  },
+  link: { marginTop: 10, fontSize: 18, color: 'blue' },
+  linkCard: {
+    marginBottom: 10,
+  },
+  headerImage: {
+    color: '#808080',
+    bottom: -90,
+    left: -35,
+    position: 'absolute',
+  },
 });
