@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
+import CharactersScreen from '.';
 
 export default function CharactersLayout() {
   return (
@@ -7,20 +8,19 @@ export default function CharactersLayout() {
       screenOptions={{
         headerStyle: { backgroundColor: '#A1CEDC' },
         headerTintColor: '#fff',
-        headerTitle: () => <CustomHeader />,        
+        headerTitle: () => <CustomHeader />,
         headerTitleAlign: 'center',
+        headerBackTitleVisible: false,
       }}
     >
+      <Stack.Screen name="index" />
       <Stack.Screen
-        name="modal"
+        name="detailsModal"
         options={{
-          presentation: 'modal', 
-          title: 'Character Modal',
-          animationTypeForReplace: 'pop',
-          gestureEnabled: true,
-          headerShown: false,
+          presentation: 'modal'
         }}
       />
+      <Stack.Screen name="details"/>
     </Stack>
   );
 }
