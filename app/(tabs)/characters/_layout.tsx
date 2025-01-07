@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
-import CharactersScreen from '.';
 
 export default function CharactersLayout() {
   return (
